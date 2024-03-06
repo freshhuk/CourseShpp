@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="554f26fb-9b10-4fb8-9c52-eecc0047bb08" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/names-data.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -40,6 +41,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Repos\CourseShpp" />
       <recent name="D:\Repos\CourseShpp\src" />
     </key>
   </component>
@@ -59,6 +61,8 @@
       <workItem from="1709239988700" duration="447000" />
       <workItem from="1709327032541" duration="199000" />
       <workItem from="1709575059686" duration="925000" />
+      <workItem from="1709667451183" duration="1345000" />
+      <workItem from="1709759596801" duration="658000" />
     </task>
     <servers />
   </component>
