@@ -47,15 +47,7 @@ public class NameSurferEntry implements NameSurferConstants {
             i++;
         }
     }
-
-
-
-
-
-
-
     /* Method: getName() */
-
     /*
      * Returns the name associated with this entry.
      */

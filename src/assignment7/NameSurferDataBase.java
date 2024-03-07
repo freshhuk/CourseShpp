@@ -22,7 +22,7 @@ import java.util.HashMap;
 
 public class NameSurferDataBase implements NameSurferConstants {
 
-    HashMap<String,NameSurferEntry> nameDB = new HashMap<String, NameSurferEntry>();
+    HashMap<String, NameSurferEntry> nameDB = new HashMap<String, NameSurferEntry>();
 
     /* Constructor: NameSurferDataBase(filename) */
     /**
@@ -32,28 +32,20 @@ public class NameSurferDataBase implements NameSurferConstants {
      * occurs as the file is being read.
      */
     public NameSurferDataBase(String filename) {
-
-        try{
+        try {
             //We read all the data into our array
             BufferedReader rd = new BufferedReader(new FileReader(filename));
 
-            while(true){
+            while (true) {
                 String line = rd.readLine();
-                if(line == null)break;//if the file has ended we exit the loop
-                NameSurferEntry file = new NameSurferEntry(line);
-                nameDB.put(file.getName(), file);//put the received data into our hashmap
-
-
+                if (line == null) break;//if the file has ended we exit the loop
+                NameSurferEntry entry = new NameSurferEntry(line);
+                nameDB.put(entry.getName(), entry);//put the received data into our hashmap
             }
-        }catch(IOException ex){
+        } catch (IOException ex) {
             throw new ErrorException(ex);
         }
-
-
-
-
     }
-
     /* Method: findEntry(name) */
     /**
      * Returns the NameSurferEntry associated with this name, if one
@@ -62,10 +54,12 @@ public class NameSurferDataBase implements NameSurferConstants {
      */
     public NameSurferEntry findEntry(String name) {
         //method for finding by object name if it is not found we get null
-        name = name.toLowerCase();
-        String newName = (name.substring(0, 1).toUpperCase()) + name.substring(1) ;
-        if(nameDB.containsKey(newName)){
-            return nameDB.get(newName);
+        if(!name.isEmpty()){
+            name = name.toLowerCase();
+            String newName = (name.substring(0, 1).toUpperCase()) + name.substring(1);
+            if (nameDB.containsKey(newName)) {
+                return nameDB.get(newName);
+            }
         }
         return null;
     }

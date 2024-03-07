@@ -35,15 +35,10 @@ public class NameSurfer extends SimpleProgram implements NameSurferConstants {
         add(nameField,NORTH);
         add(graphButton, NORTH);
         add(clearButton, NORTH);
-
-
-
         //Launch to track button clicks
         addActionListeners();
         nameField.addActionListener(this);
     }
-
-
     /* Method: actionPerformed(e) */
     /**
      * This class is responsible for detecting when the buttons are
@@ -54,7 +49,7 @@ public class NameSurfer extends SimpleProgram implements NameSurferConstants {
 
         //Here are the implementations of all the actions of each Interactors
         //If you press the button, we resize the graph and update it
-        if( e.getSource() == graphButton){
+        if( e.getSource() == graphButton || e.getSource() == nameField){
             var entry = namesDB.findEntry(nameField.getText());
             if(entry != null){
                 graph.addEntry(namesDB.findEntry(nameField.getText()));
@@ -64,14 +59,6 @@ public class NameSurfer extends SimpleProgram implements NameSurferConstants {
             //We clean everything we have
             graph.clear();
             graph.update();
-        }else if( e.getSource() == nameField ){
-            //We get the text from our field if we pressed enter
-            var entry = namesDB.findEntry(nameField.getText());
-            if(entry != null){
-                graph.addEntry(namesDB.findEntry(nameField.getText()));
-                graph.update();
-            }
         }
-
     }
 }
