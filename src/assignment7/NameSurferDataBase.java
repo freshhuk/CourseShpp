@@ -43,7 +43,7 @@ public class NameSurferDataBase implements NameSurferConstants {
                 nameDB.put(entry.getName(), entry);//put the received data into our hashmap
             }
         } catch (IOException ex) {
-            throw new ErrorException(ex);
+            System.out.println("File not found");
         }
     }
     /* Method: findEntry(name) */
