@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="554f26fb-9b10-4fb8-9c52-eecc0047bb08" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assignment2/Assignment2Part6.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/assignment2/Assignment2Part6.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assignment7/NameSurferDataBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/assignment7/NameSurferDataBase.java" afterDir="false" />
-    </list>
+    <list default="true" id="554f26fb-9b10-4fb8-9c52-eecc0047bb08" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -74,7 +70,7 @@
       <workItem from="1710151097549" duration="594000" />
       <workItem from="1710243775910" duration="609000" />
       <workItem from="1710250356473" duration="598000" />
-      <workItem from="1710448380820" duration="384000" />
+      <workItem from="1710448380820" duration="1093000" />
     </task>
     <servers />
   </component>
