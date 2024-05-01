@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="554f26fb-9b10-4fb8-9c52-eecc0047bb08" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/assignment9/MathLogic.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assignment9/MathTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assignment7/NameSurferGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/assignment7/NameSurferGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assignment9/MathLogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/assignment9/MathLogic.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assignment9/MathTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/assignment9/MathTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +44,7 @@
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;onboarding.tips.debug.path&quot;: &quot;D:/Repos/CourseShpp/src/Main.java&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -85,11 +87,29 @@
       <workItem from="1710837161748" duration="2378000" />
       <workItem from="1711101058457" duration="1209000" />
       <workItem from="1711144101623" duration="326000" />
-      <workItem from="1713866683245" duration="335000" />
+      <workItem from="1713866683245" duration="1238000" />
+      <workItem from="1713901803261" duration="304000" />
+      <workItem from="1714116816393" duration="1226000" />
+      <workItem from="1714158859580" duration="43000" />
+      <workItem from="1714246253772" duration="895000" />
+      <workItem from="1714413853895" duration="5924000" />
+      <workItem from="1714454610904" duration="8000" />
+      <workItem from="1714454711050" duration="1840000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

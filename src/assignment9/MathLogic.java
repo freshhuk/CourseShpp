@@ -1,25 +1,32 @@
 package assignment9;
+import java.math.*;
 
 import java.util.HashMap;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MathLogic {
 
     public static void main(String[] args){
-
-        //Get the first element of the array which will be the equation
-        String expression = args[0];
-        //Parsing our equation
-        HashMap<String, Double> variables = parsing(args);
-        try {
-            //We carry out the place to solve the equation
-            double result = calculate(expression, variables);
-            System.out.println("Result: " + result);
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+        if(args[0] == null){
+            System.out.println("Error args is null");
         }
-    }
+        else{
+            //Get the first element of the array which will be the equation
+            String expression = args[0];
+            //Parsing our equation
+            HashMap<String, Double> variables = parsing(args);
+            try {
+                //We carry out the place to solve the equation
+                double result = calculate(expression, variables);
+                System.out.println("Result: " + result);
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
 
+    }
 
 
 
@@ -32,12 +39,19 @@ public class MathLogic {
      */
     public static double calculate(String expression, HashMap<String, Double> variables) {
         // Add spaces before and after the minus to correctly define the expression
+
         expression = expression.replaceAll("(?<=[-+*/^()])|(?=[-+*/^()])", " $0 ");
+        System.out.println(expression);
 
         // Check for a unary minus at the beginning of an expression
         expression = expression.replaceFirst("^\\s*-", " -1 * ");
+        System.out.println(expression);
+
+
         //Divide everything into tokens after adding spaces
         String[] tokens = expression.split("\\s+");
+        System.out.println(expression);
+
         //Create a stack for our numbers and operators
         Stack<Double> values = new Stack<>();
         Stack<Character> operators = new Stack<>();
@@ -152,17 +166,18 @@ public class MathLogic {
      * @return We return a number that is the order in execution
      */
     private static int precedence(char operator) {
-        switch (operator) {
-            case '^':
-                return 3;
-            case '*':
-            case '/':
-                return 2;
-            case '+':
-            case '-':
-                return 1;
-            default:
-                return 0;
+        return switch (operator) {
+            case '^' -> 3;
+            case '*', '/' -> 2;
+            case '+', '-' -> 1;
+            default -> 0;
+        };
+    }
+    private static String unarniuMinus(String line){
+        String result ="";
+        for (int i = 0; i < line.length(); i++){
+
         }
+        return result;
     }
 }

@@ -11,7 +11,6 @@ package assignment7;
 
 import acm.graphics.*;
 
-import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 import java.awt.*;
