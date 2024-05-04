@@ -24,7 +24,8 @@ public class Assignment11Part1 extends WindowProgram {
         //True case
         //drawFunc("y=-10");
         //drawFunc("y=xr3");
-        drawFunc("y=x");
+        //drawFunc("y=-x");
+        drawFunc("y=x^2");
     }
 
     //Парсим функцию так : отельно Х, отдельно действие над ним
@@ -39,11 +40,27 @@ public class Assignment11Part1 extends WindowProgram {
                 createLineFunc(0, y, getWidth(), y);
             }
             else if (typeFunc == 'x') {
-                double y = getHeight() / 2.;
-                y -= Double.parseDouble(parsedFunc.get(0));
-                createLineFunc(0, y, getWidth(), y);
+                if (parsedFunc.get(0).equals("x")) {
+                    // Код для графика y = x
+                    createLineFunc(0, getHeight(), getWidth(), 0);
+                }
+                else{
+                    createLineFunc(0, 0, getWidth(), getHeight());
+                }
             }
-            else if(typeFunc == '0'){
+            else if (typeFunc == 'p') {
+                double centerX = getWidth() / 2.0;
+                double centerY = getHeight() / 2.0;
+
+                drawParabola(centerX, centerY, true, true);  // Направо
+                drawParabola(centerX, centerY, false, true); // Налево
+            } else if (typeFunc == 'g') {
+                double centerX = getWidth() / 2.0;
+                double centerY = getHeight() / 2.0;
+
+                drawParabola(centerX, centerY, true, true);  // Направо
+                drawParabola(centerX, centerY, false, false); // Налево
+            } else if(typeFunc == '0'){
                 System.out.println("Unknown func");
             }
 
@@ -72,7 +89,7 @@ public class Assignment11Part1 extends WindowProgram {
     }
     private char getTypeFunc(String func){
         char type = '0';
-        if (func.equals("x")){
+        if (func.equals("x") || func.equals("-x")){
             type = 'x';
         }
         else if (func.equals("x^2")){
@@ -99,5 +116,18 @@ public class Assignment11Part1 extends WindowProgram {
         GLine line = new GLine(x, y, x2, y2);
         line.setColor(Color.RED);
         add(line);
+    }
+    private void drawParabola(double startX, double startY, boolean toRight, boolean itsParabola) {
+        double x = startX;
+        double y = startY;
+        double increment = toRight ? 1 : -1;
+        double lineDirection = itsParabola ? 1 : -1;
+        for (int i = 1; i <= getWidth(); i++) {
+            double nextX = x + (increment * i) - 1;
+            double nextY = y - lineDirection * ((nextX - x) * (nextX - x));
+            createLineFunc(x, y, nextX, nextY);
+            x = nextX;
+            y = nextY;
+        }
     }
 }
