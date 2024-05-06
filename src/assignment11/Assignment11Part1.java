@@ -20,12 +20,18 @@ public class Assignment11Part1 extends WindowProgram {
     public static final int APPLICATION_HEIGHT = 1000;
 
     public void run(){
+        //todo Создать может быть структуру как модель для
+        // передачи данных бо может быть передаватся дахера чего и как то это скоротить
+        // для парсинга создать свое дерево куда хранить данніе полученіе со строки
+
+
         createLine();
         //True case
         //drawFunc("y=-10");
         //drawFunc("y=xr3");
         //drawFunc("y=-x");
-        drawFunc("y=x^2");
+        //drawFunc("y=-x^2");
+        drawFunc("y=-x^3");
     }
 
     //Парсим функцию так : отельно Х, отдельно действие над ним
@@ -51,15 +57,28 @@ public class Assignment11Part1 extends WindowProgram {
             else if (typeFunc == 'p') {
                 double centerX = getWidth() / 2.0;
                 double centerY = getHeight() / 2.0;
+                if(parsedFunc.get(0).equals("x")){
+                    drawParabola(centerX, centerY, true, true);  // Направо
+                    drawParabola(centerX, centerY, false, true); // Налево
+                }
+                else{
+                    drawParabola(centerX, centerY, true, false);  // Налево
+                    drawParabola(centerX, centerY, false, false); // Налево
+                }
 
-                drawParabola(centerX, centerY, true, true);  // Направо
-                drawParabola(centerX, centerY, false, true); // Налево
             } else if (typeFunc == 'g') {
                 double centerX = getWidth() / 2.0;
                 double centerY = getHeight() / 2.0;
 
-                drawParabola(centerX, centerY, true, true);  // Направо
-                drawParabola(centerX, centerY, false, false); // Налево
+                if(parsedFunc.get(0).equals("x")){
+                    drawParabola(centerX, centerY, true, true);  // Направо
+                    drawParabola(centerX, centerY, false, false); // Налево
+                }
+                else {
+                    drawParabola(centerX, centerY, true, false);  // Налево
+                    drawParabola(centerX, centerY, false, true); // Направо
+                }
+
             } else if(typeFunc == '0'){
                 System.out.println("Unknown func");
             }
@@ -92,10 +111,10 @@ public class Assignment11Part1 extends WindowProgram {
         if (func.equals("x") || func.equals("-x")){
             type = 'x';
         }
-        else if (func.equals("x^2")){
+        else if (func.equals("x^2") || func.equals("-x^2")){
             type = 'p';
         }
-        else if (func.equals("x^3")){
+        else if (func.equals("x^3") || func.equals("-x^3")){
             type = 'g';
         }
         else if (Character.isDigit(func.charAt(0)) || Character.isDigit(func.charAt(1))){
