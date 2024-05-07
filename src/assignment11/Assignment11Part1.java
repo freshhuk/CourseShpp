@@ -3,6 +3,9 @@ package assignment11;
 import acm.graphics.GLine;
 import com.shpp.cs.a.graphics.WindowProgram;
 
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -27,11 +30,18 @@ public class Assignment11Part1 extends WindowProgram {
 
         createLine();
         //True case
-        //drawFunc("y=-10");
+        //todo В целом работают все обычные перетворення,
+        // осталось добавить умножение и дееление после чисел
+        // а так же перемещение влево в право
+        // а потом сделать потдержку к линийным функциям, и готово
+        // (после чего лучше сделать так что б оно рисовало по любой формуле ну тип де икс не в начале и тд)
+
+
+        drawFunc("y=x^2/10-20");
         //drawFunc("y=xr3");
         //drawFunc("y=-x");
         //drawFunc("y=-x^2");
-        drawFunc("y=-x^3");
+        //drawFunc("y=-x^3");
     }
 
     //Парсим функцию так : отельно Х, отдельно действие над ним
@@ -55,57 +65,57 @@ public class Assignment11Part1 extends WindowProgram {
                 }
             }
             else if (typeFunc == 'p') {
-                double centerX = getWidth() / 2.0;
-                double centerY = getHeight() / 2.0;
-                if(parsedFunc.get(0).equals("x")){
-                    drawParabola(centerX, centerY, true, true);  // Направо
-                    drawParabola(centerX, centerY, false, true); // Налево
+
+                double[] cord = changeGraph(parsedFunc);
+                double centerX = cord[0];
+                double centerY = cord[1];
+                if(parsedFunc.get(0).equals("x^2")){
+                    drawParabola(centerX, centerY, cord[2],true, true);  // Направо
+                    drawParabola(centerX, centerY, cord[2],false, true); // Налево
                 }
                 else{
-                    drawParabola(centerX, centerY, true, false);  // Налево
-                    drawParabola(centerX, centerY, false, false); // Налево
+                    drawParabola(centerX, centerY, cord[2],true, false);  // Налево
+                    drawParabola(centerX, centerY, cord[2],false, false); // Налево
                 }
 
             } else if (typeFunc == 'g') {
                 double centerX = getWidth() / 2.0;
                 double centerY = getHeight() / 2.0;
 
-                if(parsedFunc.get(0).equals("x")){
-                    drawParabola(centerX, centerY, true, true);  // Направо
-                    drawParabola(centerX, centerY, false, false); // Налево
+                if(parsedFunc.get(0).equals("x^3")){
+                    drawParabola(centerX, centerY, 0,true, true);  // Направо
+                    drawParabola(centerX, centerY, 0,false, false); // Налево
                 }
                 else {
-                    drawParabola(centerX, centerY, true, false);  // Налево
-                    drawParabola(centerX, centerY, false, true); // Направо
+                    drawParabola(centerX, centerY,0, true, false);  // Налево
+                    drawParabola(centerX, centerY, 0,false, true); // Направо
                 }
 
             } else if(typeFunc == '0'){
                 System.out.println("Unknown func");
             }
-
-
         }
+
     }
 
-    private ArrayList<String> parser(String func){
-
+    private ArrayList<String> parser(String func) {
         ArrayList<String> parsedFunc = new ArrayList<>();
         if (func.startsWith("y=")) {
-            func = func.substring(2); // удаляем первые два символа ("y=")
-            func = func.replace(" ", ""); // удаляем пробелы
-
-            // Разбиваем строку на составляющие по операторам
-            System.out.println(func);
-            // Добавляем каждую составляющую в список
-            parsedFunc.add(func);
-
-        }
-        else {
+            func = func.substring(2).replace(" ", "");; // Удаляем "y="
+            func = func.replaceAll("\\+", " +")
+                    .replaceAll("-", " -")
+                    .replaceAll("\\*", " *")
+                    .replaceAll("/", " /").trim();
+            String[] tokens = func.split(" ");
+            parsedFunc.addAll(Arrays.asList(tokens));;
+        } else {
             return null;
         }
 
         return parsedFunc;
     }
+
+
     private char getTypeFunc(String func){
         char type = '0';
         if (func.equals("x") || func.equals("-x")){
@@ -136,17 +146,54 @@ public class Assignment11Part1 extends WindowProgram {
         line.setColor(Color.RED);
         add(line);
     }
-    private void drawParabola(double startX, double startY, boolean toRight, boolean itsParabola) {
+    private void drawParabola(double startX, double startY, double width, boolean toRight, boolean itsParabola) {
         double x = startX;
         double y = startY;
         double increment = toRight ? 1 : -1;
         double lineDirection = itsParabola ? 1 : -1;
         for (int i = 1; i <= getWidth(); i++) {
             double nextX = x + (increment * i) - 1;
-            double nextY = y - lineDirection * ((nextX - x) * (nextX - x));
-            createLineFunc(x, y, nextX, nextY);
+            double nextY;
+            if (width == 0) {
+                nextY = y - lineDirection * ((nextX - startX) * (nextX - startX) / 10);
+            }
+            else if (width > 0) {
+                nextY = y - lineDirection * ((nextX - startX) * (nextX - startX) * width);
+            }
+            else {
+                nextY = y - lineDirection * ((nextX - startX) * (nextX - startX) / (10 + (-1*width*10)));
+            }
+            createLineFunc(x , y, nextX , nextY);
             x = nextX;
             y = nextY;
         }
+    }
+
+    private double[] changeGraph(ArrayList<String> parsedFunc){
+        double[] cordXY = new double[3];// first element - X, second - Y, third - width
+        double x = getWidth() / 2.;
+        double y = getHeight() / 2.;
+        double width = 0;
+
+
+        for(int i = 1; i  <  parsedFunc.size(); i++){
+            if(parsedFunc.get(i).charAt(0) == '+'){
+                y -= Double.parseDouble(parsedFunc.get(i).substring(1));
+            }
+            if(parsedFunc.get(i).charAt(0) == '-'){
+                y += Double.parseDouble(parsedFunc.get(i).substring(1));
+            }
+            if(parsedFunc.get(1).charAt(0) == '*'){
+                width += Double.parseDouble(parsedFunc.get(1).substring(1));
+            }
+            if(parsedFunc.get(1).charAt(0) == '/'){
+                width -= Double.parseDouble(parsedFunc.get(1).substring(1));
+            }
+        }
+        cordXY[0] = x;
+        cordXY[1] = y;
+        cordXY[2] = width;
+        System.out.println(width);
+        return cordXY;
     }
 }
