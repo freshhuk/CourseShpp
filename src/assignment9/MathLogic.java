@@ -1,183 +1,244 @@
 package assignment9;
-import java.math.*;
-
-import java.util.HashMap;
-import java.util.Stack;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*;
+import java.util.function.Function;
 
 public class MathLogic {
+    private static final Map<String, Function<Double, Double>> mathFunctions = new HashMap<>();
+    private static final Map<String, Integer> precedence = new HashMap<>();
 
-    public static void main(String[] args){
-        if(args[0] == null){
-            System.out.println("Error args is null");
+    static {
+        // Initialize math functions
+        mathFunctions.put("sin", x -> Math.sin(Math.toRadians(x)));
+        mathFunctions.put("cos", x -> Math.cos(Math.toRadians(x)));
+        mathFunctions.put("tan", x -> Math.tan(Math.toRadians(x)));
+        mathFunctions.put("atan", Math::atan);
+        mathFunctions.put("log10", Math::log10);
+        mathFunctions.put("log2", x -> Math.log(x) / Math.log(2));
+        mathFunctions.put("sqrt", Math::sqrt);
+
+        // Set operator priorities
+        precedence.put("(", 0);
+        precedence.put("+", 1);
+        precedence.put("-", 1);
+        precedence.put("*", 2);
+        precedence.put("/", 2);
+        precedence.put("^", 3);
+        precedence.put("~", 4); // Unary minus
+    }
+
+    public static void main(String[] args) {
+
+        if (args == null || args.length < 1) {
+            System.out.println("Error with args");
         }
-        else{
+        else {
             //Get the first element of the array which will be the equation
             String expression = args[0];
             //Parsing our equation
             HashMap<String, Double> variables = parsing(args);
             try {
-                //We carry out the place to solve the equation
                 double result = calculate(expression, variables);
                 System.out.println("Result: " + result);
-            } catch (Exception e) {
+            } catch (IllegalArgumentException e) {
                 System.out.println("Error: " + e.getMessage());
             }
         }
-
     }
-
 
 
     /**
-     * A method that calculates our entire equation based
-     * on the formula and parsed values
-     * @param expression - Equation unchanged
-     * @param variables Parsed numbers
-     * @return Calculation result
+     * Calculate the value of the given expression using the specified variables.
+     *
+     * @param formula   The mathematical formula to evaluate
+     * @param variables A map of variable names to values
+     * @return The result of the calculation
      */
-    public static double calculate(String expression, HashMap<String, Double> variables) {
-        // Add spaces before and after the minus to correctly define the expression
-
-        expression = expression.replaceAll("(?<=[-+*/^()])|(?=[-+*/^()])", " $0 ");
-        System.out.println(expression);
-
-        // Check for a unary minus at the beginning of an expression
-        expression = expression.replaceFirst("^\\s*-", " -1 * ");
-        System.out.println(expression);
-
-
-        //Divide everything into tokens after adding spaces
-        String[] tokens = expression.split("\\s+");
-        System.out.println(expression);
-
-        //Create a stack for our numbers and operators
-        Stack<Double> values = new Stack<>();
-        Stack<Character> operators = new Stack<>();
-        boolean unaryMinusLast = true;
+    public static double calculate(String formula, HashMap<String, Double> variables) {
+        String[] tokens = tokenize(formula);
+        Stack<Double> operandStack = new Stack<>();
+        Stack<String> operatorStack = new Stack<>();
 
         for (String token : tokens) {
-            if (token.trim().isEmpty()) {
-                continue;
-            }
+            if (token.isEmpty()) continue;
 
-            char firstChar = token.charAt(0);
-
-            if (Character.isDigit(firstChar) || (firstChar == '-' && unaryMinusLast)) {
-                values.push(Double.parseDouble(token));
-                unaryMinusLast = false; // Resetting the unary minus
-            } else if (Character.isLetter(firstChar)) {
-                if (variables.containsKey(token)) {
-                    values.push(variables.get(token));
+            if (token.equals("(")) {
+                operatorStack.push(token);
+            } else if (token.equals(")")) {
+                while (!operatorStack.isEmpty() && !operatorStack.peek().equals("(")) {
+                    applyOperation(operandStack, operatorStack.pop());
                 }
-                //If there is some unnecessary symbol, throw an error about it
-                else {
-                    throw new IllegalArgumentException("Undefined variable: " + token);
+                operatorStack.pop(); // Remove '('
+                if (!operatorStack.isEmpty() && mathFunctions.containsKey(operatorStack.peek())) {
+                    String function = operatorStack.pop();
+                    double value = operandStack.pop();
+                    operandStack.push(mathFunctions.get(function).apply(value));
                 }
-            }
-            //Order of parentheses for calculations, support for parentheses in an equation
-            else if (firstChar == '(') {
-                operators.push('(');
-            } else if (firstChar == ')') {
-                while (!operators.isEmpty() && operators.peek() != '(') {
-                    applyOperation(operators.pop(), values);
+            } else if (mathFunctions.containsKey(token) || precedence.containsKey(token)) {
+                // Handle unary minus
+                if (token.equals("-") && (operatorStack.isEmpty() || operatorStack.peek().equals("("))) {
+                    operatorStack.push("~");
+                } else {
+                    while (!operatorStack.isEmpty() && (precedence.get(operatorStack.peek()) != null)
+                            && (precedence.get(operatorStack.peek()) >= precedence(token))) {
+                        applyOperation(operandStack, operatorStack.pop());
+                    }
+                    operatorStack.push(token);
                 }
-                if (!operators.isEmpty()) {
-                    operators.pop(); // Remove '('
-                }
-            } else {
-                while (!operators.isEmpty() && precedence(operators.peek()) >= precedence(firstChar)) {
-                    applyOperation(operators.pop(), values);
-                }
-                operators.push(firstChar);
-                unaryMinusLast = firstChar == '-'; // The next minus will be unary if the current minus
+            } else if (Character.isDigit(token.charAt(0)) || Character.isLetter(token.charAt(0)) || token.charAt(0) == '-') {
+                operandStack.push(parseValue(token, variables));
             }
         }
-        //Until our operators run out, we count the action between them
-        while (!operators.isEmpty()) {
-            applyOperation(operators.pop(), values);
-        }
 
-        return values.pop();
+        while (!operatorStack.isEmpty()) {
+            applyOperation(operandStack, operatorStack.pop());
+        }
+        return operandStack.pop();
     }
-
     /**
      * The method parses our entire equation
      * Replaces alphabetic variables with numbers
      * @param line - Accepting incoming parameters
-     * @return Returns the entire value after calculations
      */
-    private static HashMap<String, Double> parsing(String[] line){
+    private static HashMap<String, Double> parsing(String[] line) {
         HashMap<String, Double> variables = new HashMap<>();
         for (int i = 1; i < line.length; i++) {
-            String[] parts = line[i].replace(" ", "").split("=");
-            if (parts.length == 2) {
-                String variable = parts[0];
-                double value = Double.parseDouble(parts[1]);
-                variables.put(variable, value);
+            String[] varValuePair = line[i].split("=");
+            if (varValuePair.length == 2) {
+                String varName = varValuePair[0].trim();
+                try {
+                    double value = Double.parseDouble(varValuePair[1].trim());
+                    variables.put(varName, value);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid value for variable " + varName + ": " + varValuePair[1]);
+                }
             } else {
-                System.out.println("Invalid variable format: " + line[i]);
+                System.out.println("Invalid format for variable and value: " + line[i]);
                 return null;
             }
         }
         return variables;
     }
     /**
+     * Parse the value of the given token using the specified variables.
+     *
+     * @param token     The token to parse (can be a number or variable name)
+     * @param variables A map of variable names to values
+     * @return The parsed value of the token, or NaN if the token is not a valid number or variable
+     */
+    private static double parseValue(String token, HashMap<String, Double> variables) {
+        try {
+            return Double.parseDouble(token);
+        } catch (NumberFormatException e) {
+            return variables.getOrDefault(token, Double.NaN);
+        }
+    }
+
+    /**
      * A method that performs a mathematical operation between two numbers
      * @param operator - We accept the sign of the operation that we must do
      * @param values - The meaning with which we perform a mathematical operation
      */
-    private static void applyOperation(char operator, Stack<Double> values) {
+    private static void applyOperation(Stack<Double> values, String operator) {
         //Throw an error if the stack is empty
         if (values.isEmpty()) {
             throw new IllegalStateException("Stack is empty");
         }
-        double b = values.pop();
-        double a = values.pop();
-        switch (operator) {
-            case '^':
-                values.push(Math.pow(a, b));
-                break;
-            case '*':
-                values.push(a * b);
-                break;
-            case '/':
-                //You can't divide by zero
-                if (b == 0) {
-                    throw new ArithmeticException("Division by zero");
-                }
-                values.push(a / b);
-                break;
-            case '+':
-                values.push(a + b);
-                break;
-            case '-':
-                values.push(a - b);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown operator: " + operator);
+        if (operator.equals("~")) {
+            // Unary minus operation
+            double operand = values.pop();
+            values.push(-operand);
+        } else if (mathFunctions.containsKey(operator)) {
+            // Mathematical function
+            double operand = values.pop();
+            values.push(mathFunctions.get(operator).apply(operand));
+        } else {
+            // Binary operation
+            double rightNum = values.pop();
+            double leftNum = values.isEmpty() ? 0 : values.pop();
+            switch (operator) {
+                case "+":
+                    values.push(leftNum + rightNum);
+                    break;
+                case "-":
+                    values.push(leftNum - rightNum);
+                    break;
+                case "*":
+                    values.push(leftNum * rightNum);
+                    break;
+                case "/":
+                    //You can't divide by zero
+                    if (rightNum == 0) {
+                        throw new IllegalArgumentException("Division by zero");
+                    }
+                    values.push(leftNum / rightNum);
+                    break;
+                case "^":
+                    values.push(Math.pow(leftNum, rightNum));
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown operator: " + operator);
+            }
         }
     }
 
+    /**
+     * Tokenize the given formula into a list of tokens.
+     *
+     * @param formula The mathematical formula to tokenize
+     * @return An array of tokens
+     */
+    private static String[] tokenize(String formula) {
+        List<String> tokens = new ArrayList<>();
+        StringBuilder currentToken = new StringBuilder();
+        boolean mayBeUnary = true;
+
+        for (int i = 0; i < formula.length(); i++) {
+            char ch = formula.charAt(i);
+            if (Character.isWhitespace(ch)) continue;
+
+            if (Character.isDigit(ch) || (ch == '.')) {
+                // Collect digits and decimal point
+                currentToken.append(ch);
+                mayBeUnary = false;
+            } else if (Character.isLetter(ch)) {
+                // Collect letters
+                if (!currentToken.isEmpty() && !Character.isLetter(currentToken.charAt(0))) {
+                    tokens.add(currentToken.toString());
+                    currentToken.setLength(0);
+                }
+                currentToken.append(ch);
+                mayBeUnary = false;
+            } else {
+                // Process operators
+                if (!currentToken.isEmpty()) {
+                    tokens.add(currentToken.toString());
+                    currentToken.setLength(0);
+                }
+                if (ch == '-' && mayBeUnary) {
+                    tokens.add("~"); // Unary minus
+                } else {
+                    tokens.add(String.valueOf(ch));
+                }
+                mayBeUnary = "+-*/^(".contains(String.valueOf(ch));
+            }
+        }
+        if (!currentToken.isEmpty()) {
+            tokens.add(currentToken.toString());
+        }
+        return tokens.toArray(new String[0]);
+    }
     /**
      * A method that determines the sequence of actions performed on operators
      * @param operator - We accept a symbol that is a mathematical operator
      * @return We return a number that is the order in execution
      */
-    private static int precedence(char operator) {
-        return switch (operator) {
-            case '^' -> 3;
-            case '*', '/' -> 2;
-            case '+', '-' -> 1;
+    private static int precedence(String operator) {
+        return mathFunctions.containsKey(operator) ? 5 : switch (operator) {
+            case "+", "-" -> 1;
+            case "*", "/" -> 2;
+            case "^" -> 3;
+            case "~" -> 4;
             default -> 0;
         };
-    }
-    private static String unarniuMinus(String line){
-        String result ="";
-        for (int i = 0; i < line.length(); i++){
-
-        }
-        return result;
     }
 }
