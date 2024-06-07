@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="554f26fb-9b10-4fb8-9c52-eecc0047bb08" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/assignment12/TicketManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assignment12/TicketManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/assignment12/TicketManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,6 +109,8 @@
       <workItem from="1715198670844" duration="2801000" />
       <workItem from="1715365984283" duration="100000" />
       <workItem from="1717618883940" duration="870000" />
+      <workItem from="1717619809172" duration="58000" />
+      <workItem from="1717791882825" duration="1324000" />
     </task>
     <servers />
   </component>
