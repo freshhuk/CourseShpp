@@ -16,6 +16,7 @@ class Ticket{
 public class TicketManager {
     private Stack<Ticket> stack = new Stack<>();
 
+    //todo
     public static void main(String[] args) {
         //menu
         int information;
