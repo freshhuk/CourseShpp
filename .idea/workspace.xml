@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="554f26fb-9b10-4fb8-9c52-eecc0047bb08" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/assignment13/TZforBAD.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assignment12/TicketManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/assignment12/TicketManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assignment13/TZforBAD.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/assignment13/TZforBAD.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,7 +112,11 @@
       <workItem from="1717619809172" duration="58000" />
       <workItem from="1717791882825" duration="2772000" />
       <workItem from="1717877995788" duration="19000" />
-      <workItem from="1718566260693" duration="806000" />
+      <workItem from="1718566260693" duration="857000" />
+      <workItem from="1718572057168" duration="109000" />
+      <workItem from="1718572211015" duration="69000" />
+      <workItem from="1718630999979" duration="657000" />
+      <workItem from="1718656516435" duration="1688000" />
     </task>
     <servers />
   </component>
